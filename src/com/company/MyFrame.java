@@ -1,12 +1,10 @@
 package com.company;
-import org.w3c.dom.css.RGBColor;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Random;
 
 public class MyFrame extends JPanel implements ActionListener, MouseMotionListener, MouseListener {
@@ -16,6 +14,7 @@ public class MyFrame extends JPanel implements ActionListener, MouseMotionListen
     public JLabel background = new JLabel(new ImageIcon("/Users/farhankhan/IdeaProjects/WindowsVista/src/com/company/assets/windowsbackground.jpeg"));
     ImageIcon scaledInternet = new ImageIcon(new ImageIcon("/Users/farhankhan/IdeaProjects/WindowsVista/src/com/company/assets/internet.png").getImage().getScaledInstance(75, 75, Image.SCALE_DEFAULT));
     ImageIcon scaledFileExp = new ImageIcon(new ImageIcon("/Users/farhankhan/IdeaProjects/WindowsVista/src/com/company/assets/fileexplorer.png").getImage().getScaledInstance(75, 75, Image.SCALE_DEFAULT));
+    ImageIcon closeIcon = new ImageIcon(new ImageIcon("/Users/farhankhan/IdeaProjects/WindowsVista/src/com/company/assets/sfc.jpeg").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
     public JButton internetExp = new JButton(scaledInternet);
     public JButton fileExp = new JButton(scaledFileExp);
     ArrayList<JPanel> arrPan = new ArrayList<>();
@@ -48,7 +47,18 @@ public class MyFrame extends JPanel implements ActionListener, MouseMotionListen
 
     public void createNewWindow(String name) {
         Random rand = new Random();
-        JPanel panel2 = new JPanel();
+        final JPanel panel2 = new JPanel();
+        JPanel closeButtonBar = new JPanel();
+        panel2.setLayout(new BorderLayout());
+        closeButtonBar.setLayout(new BoxLayout(closeButtonBar, BoxLayout.Y_AXIS));
+        closeButtonBar.setSize(500, 200);
+        closeButtonBar.setBackground(new Color(0,98, 252,  255));
+        JButton closeButton = new JButton(closeIcon);
+        closeButton.setName(name + " button");
+        closeButton.addActionListener(this);
+        closeButton.setBorder(BorderFactory.createEmptyBorder(5,10,5,10));
+        closeButtonBar.add(closeButton);
+        panel2.add(closeButtonBar, BorderLayout.NORTH);
         panel2.setName(name);
         panel2.setSize(500, 500);
         panel2.setBackground(new Color(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255)));
@@ -66,42 +76,56 @@ public class MyFrame extends JPanel implements ActionListener, MouseMotionListen
             createNewWindow(name);
             //make if pressed, and then reorder array based on that
         }
+        if (e.getSource() == fileExp) {
+            String name = "file Exp " + arrPan.size();
+            createNewWindow(name);
+            //make if pressed, and then reorder array based on that
+        }
+        if (e.getSource().toString().contains("button")) {
+            String titleToRemove = e.getSource().toString();
+            for (int i = 0; i < arrPan.size(); i++) {
+                if(titleToRemove.contains(arrPan.get(i).getName())) {
+                    panelRemover(i);
+                    //arrPan.get(i).setVisible(false);
+                }
+            }
+        }
     }
     public void drawerFromArray() {
-            for (int i = 0; i < arrPan.size(); i++) {
-                frame.add(arrPan.get(i));
+        System.out.println(arrPan.size());
+        if (arrPan.size() > 0) {
+            for (JPanel jPanel : arrPan) {
+                frame.add(jPanel);
+                frame.revalidate();
                 frame.pack();
                 repaint();
                 //tab counter
                 //blue screen of death
             }
-
+        } else{
+            frame.revalidate();
+            frame.pack();
+            repaint();
+        }
+    }
+    public void panelRemover(int index) {
+        JPanel panelToDie = arrPan.get(index);
+        frame.remove(panelToDie);
+        arrPan.remove(index);
+        System.out.println(arrPan.size());
+        drawerFromArray();
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        for (int i = 0; i < arrPan.size(); i++) {
-            if (e.getSource().toString().contains(arrPan.get(i).getName())) {
-                arrPan.remove(i);
-                arrPan.add(0, (JPanel) e.getSource());
-                //System.out.println(Arrays.toString(arrPan.toArray()));
-                drawerFromArray();
-            }
-        }
+        //reordeer(e);
 
 
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        for (int i = 0; i < arrPan.size(); i++) {
-            if (e.getSource().toString().contains(arrPan.get(i).getName())) {
-                arrPan.remove(i);
-                arrPan.add(0, (JPanel) e.getSource());
-                //System.out.println(Arrays.toString(arrPan.toArray()));
-                drawerFromArray();
-            }
-        }
+        reorder(e);
         drawerFromArray();
         x = e.getX();
         y = e.getY();
@@ -127,13 +151,24 @@ public class MyFrame extends JPanel implements ActionListener, MouseMotionListen
     public void mouseDragged(MouseEvent e) {
         e.getComponent().setLocation((e.getX()
                 + e.getComponent().getX()) - x, (e.getY() + e.getComponent().getY()) - y);
-        drawerFromArray();
+        //drawerFromArray();
+        repaint();
 
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
 
+    }
+    public void reorder(MouseEvent e) {
+        for (int i = 0; i < arrPan.size(); i++) {
+            if (e.getSource().toString().contains(arrPan.get(i).getName())) {
+                arrPan.remove(i);
+                arrPan.add(0, (JPanel) e.getSource());
+                //System.out.println(Arrays.toString(arrPan.toArray()));
+                drawerFromArray();
+            }
+        }
     }
 
 }
