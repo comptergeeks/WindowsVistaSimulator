@@ -3,19 +3,16 @@ import org.w3c.dom.css.RGBColor;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 
-public class MyFrame extends JPanel implements ActionListener {
+public class MyFrame extends JPanel implements ActionListener, MouseMotionListener, MouseListener {
     public JFrame frame = new JFrame("Windows XP");
     public JPanel panel = new JPanel();
-    int x = 20;
+    private int x, y;
     public JLabel background = new JLabel(new ImageIcon("/Users/farhankhan/IdeaProjects/WindowsVista/src/com/company/assets/windowsbackground.jpeg"));
     ImageIcon scaledInternet = new ImageIcon(new ImageIcon("/Users/farhankhan/IdeaProjects/WindowsVista/src/com/company/assets/internet.png").getImage().getScaledInstance(75, 75, Image.SCALE_DEFAULT));
     ImageIcon scaledFileExp = new ImageIcon(new ImageIcon("/Users/farhankhan/IdeaProjects/WindowsVista/src/com/company/assets/fileexplorer.png").getImage().getScaledInstance(75, 75, Image.SCALE_DEFAULT));
@@ -49,21 +46,23 @@ public class MyFrame extends JPanel implements ActionListener {
         //button array forloop?
     }
 
-    public void createNewWindow() {
+    public void createNewWindow(String name) {
         Random rand = new Random();
         JPanel panel2 = new JPanel();
+        panel2.setName(name);
         panel2.setSize(500, 500);
         panel2.setBackground(new Color(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255)));
-        panel2.setLocation(rand.nextInt(255), rand.nextInt(255));
+        panel2.setLocation(rand.nextInt(800), rand.nextInt(400));
+        panel2.addMouseListener(this);
         drawerFromArray();
         arrPan.add(panel2);
-        repaint();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == internetExp) {
-            createNewWindow();
+            String name = "internet explorer " + arrPan.size();
+            createNewWindow(name);
             //make if pressed, and then reorder array based on that
         }
     }
@@ -72,7 +71,54 @@ public class MyFrame extends JPanel implements ActionListener {
                 frame.add(arrPan.get(i));
                 frame.pack();
                 repaint();
+                //tab counter
+                //blue screen of death
             }
+
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        for (int i = 0; i < arrPan.size(); i++) {
+            if (e.getSource().toString().contains(arrPan.get(i).getName())) {
+                arrPan.remove(i);
+                arrPan.add(0, (JPanel) e.getSource());
+                //System.out.println(Arrays.toString(arrPan.toArray()));
+                drawerFromArray();
+            }
+        }
+
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+
+
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+
     }
 }
 
