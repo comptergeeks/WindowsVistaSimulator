@@ -54,8 +54,9 @@ public class MyFrame extends JPanel implements ActionListener, MouseMotionListen
         panel2.setBackground(new Color(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255)));
         panel2.setLocation(rand.nextInt(800), rand.nextInt(400));
         panel2.addMouseListener(this);
-        drawerFromArray();
+        panel2.addMouseMotionListener(this);
         arrPan.add(panel2);
+        drawerFromArray();
     }
 
     @Override
@@ -93,6 +94,18 @@ public class MyFrame extends JPanel implements ActionListener, MouseMotionListen
 
     @Override
     public void mousePressed(MouseEvent e) {
+        for (int i = 0; i < arrPan.size(); i++) {
+            if (e.getSource().toString().contains(arrPan.get(i).getName())) {
+                arrPan.remove(i);
+                arrPan.add(0, (JPanel) e.getSource());
+                //System.out.println(Arrays.toString(arrPan.toArray()));
+                drawerFromArray();
+            }
+        }
+        drawerFromArray();
+        x = e.getX();
+        y = e.getY();
+        //System.out.println("pressed" + currentLocation);
     }
 
     @Override
@@ -112,7 +125,9 @@ public class MyFrame extends JPanel implements ActionListener, MouseMotionListen
 
     @Override
     public void mouseDragged(MouseEvent e) {
-
+        e.getComponent().setLocation((e.getX()
+                + e.getComponent().getX()) - x, (e.getY() + e.getComponent().getY()) - y);
+        drawerFromArray();
 
     }
 
@@ -120,5 +135,6 @@ public class MyFrame extends JPanel implements ActionListener, MouseMotionListen
     public void mouseMoved(MouseEvent e) {
 
     }
+
 }
 
