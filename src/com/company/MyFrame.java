@@ -1,5 +1,7 @@
 package com.company;
 import javax.swing.*;
+import javax.swing.event.InternalFrameEvent;
+import javax.swing.event.InternalFrameListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -38,17 +40,61 @@ public class MyFrame extends JPanel implements ActionListener {
         fileExp.addActionListener(this);
         fileExp.setBackground(null);
         fileExp.setBorder(null);
-        JDesktopPane desktopPane = new JDesktopPane();
         //button array forloop?
     }
     public void createNewWindow(String name) {
-        JInternalFrame jInternalFrame=new JInternalFrame();
+        JInternalFrame jInternalFrame = new JInternalFrame();
+        InternalFrameListener e = new InternalFrameListener() {
+            @Override
+            public void internalFrameOpened(InternalFrameEvent e) {
+            }
+
+            @Override
+            public void internalFrameClosing(InternalFrameEvent e) {
+
+            }
+
+            @Override
+            public void internalFrameClosed(InternalFrameEvent e) {
+                //need to get title of array to make sure correct one is drawing.
+                //array of maps?
+                String titleToRemove = jInternalFrame.getTitle();
+                for (int i = 0; i < listOfTabs.size(); i++) {
+                    if (listOfTabs.get(i).contains(titleToRemove)) {
+
+                    }
+                }
+            }
+
+            @Override
+            public void internalFrameIconified(InternalFrameEvent e) {
+
+            }
+
+            @Override
+            public void internalFrameDeiconified(InternalFrameEvent e) {
+
+            }
+
+            @Override
+            public void internalFrameActivated(InternalFrameEvent e) {
+
+
+            }
+
+            @Override
+            public void internalFrameDeactivated(InternalFrameEvent e) {
+
+            }
+        };
         jInternalFrame.setLocation(450, 300);
         jInternalFrame.setSize(500, 300);
         jInternalFrame.setTitle(name);
-        jInternalFrame.setVisible(true);
         jInternalFrame.setClosable(true);
         jInternalFrame.setResizable(true);
+        jInternalFrame.addInternalFrameListener(e);
+        jInternalFrame.setVisible(true);
+
         listOfTabs.add(jInternalFrame);
         for (int i = 0; i < listOfTabs.size(); i++) {
             frame.add(jInternalFrame);
@@ -58,12 +104,13 @@ public class MyFrame extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+
         if (e.getSource() == internetExp) {
-            String name = "Internet Explorer";
+            String name = "Internet Explorer" + listOfTabs.size();
             createNewWindow(name);
-            //System.out.println(Arrays.toString(listOfTabs.toArray()));
             //make if pressed, and then reorder array based on that
         }
     }
+
 }
 
