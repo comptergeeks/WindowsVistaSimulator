@@ -10,9 +10,12 @@ import java.util.Random;
 public class MyFrame extends JPanel implements ActionListener, MouseMotionListener, MouseListener {
     public JFrame frame = new JFrame("Windows XP");
     public JPanel panel = new JPanel();
+    public JPanel bottomTaskBar = new JPanel();
     private int x, y;
     public JLabel background = new JLabel(new ImageIcon("/Users/farhankhan/IdeaProjects/WindowsVista/src/com/company/assets/windowsbackground.jpeg"));
     ImageIcon scaledInternet = new ImageIcon(new ImageIcon("/Users/farhankhan/IdeaProjects/WindowsVista/src/com/company/assets/internet.png").getImage().getScaledInstance(75, 75, Image.SCALE_DEFAULT));
+    ImageIcon expPage = new ImageIcon(new ImageIcon("/Users/farhankhan/IdeaProjects/WindowsVista/src/com/company/assets/fileexplorerhome.jpeg").getImage().getScaledInstance(500, 400, Image.SCALE_DEFAULT));
+    ImageIcon intPage = new ImageIcon(new ImageIcon("/Users/farhankhan/IdeaProjects/WindowsVista/src/com/company/assets/internetexplorerpage.jpeg").getImage().getScaledInstance(500, 400, Image.SCALE_DEFAULT));
     ImageIcon scaledFileExp = new ImageIcon(new ImageIcon("/Users/farhankhan/IdeaProjects/WindowsVista/src/com/company/assets/fileexplorer.png").getImage().getScaledInstance(75, 75, Image.SCALE_DEFAULT));
     ImageIcon closeIcon = new ImageIcon(new ImageIcon("/Users/farhankhan/IdeaProjects/WindowsVista/src/com/company/assets/sfc.jpeg").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
     public JButton internetExp = new JButton(scaledInternet);
@@ -30,7 +33,9 @@ public class MyFrame extends JPanel implements ActionListener, MouseMotionListen
     }
 
     public void setPanel() {
-        frame.add(panel, BorderLayout.EAST);
+        frame.add(panel, BorderLayout.LINE_START);
+        frame.add(bottomTaskBar, BorderLayout.PAGE_END);
+        //bottomTaskBar.setLayout(new BoxLayout(bottomTaskBar, BoxLayout.X_AXIS));
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setSize(75, 900);
         panel.add(internetExp);
@@ -42,6 +47,8 @@ public class MyFrame extends JPanel implements ActionListener, MouseMotionListen
         fileExp.addActionListener(this);
         fileExp.setBackground(null);
         fileExp.setBorder(null);
+        bottomTaskBar.setSize(1600, 50);
+        bottomTaskBar.setBackground(new Color(0,96,228));
         //button array forloop?
     }
 
@@ -49,9 +56,16 @@ public class MyFrame extends JPanel implements ActionListener, MouseMotionListen
         Random rand = new Random();
         final JPanel panel2 = new JPanel();
         JPanel closeButtonBar = new JPanel();
+        JLabel image = new JLabel();
+        if (name.contains("File Explorer ")) {
+            image.setIcon(expPage);
+        }
+        if (name.contains("Internet Explorer ")) {
+            image.setIcon(intPage);
+        }
         panel2.setLayout(new BorderLayout());
         closeButtonBar.setLayout(new BoxLayout(closeButtonBar, BoxLayout.Y_AXIS));
-        closeButtonBar.setSize(500, 200);
+        closeButtonBar.setSize(500, 100);
         closeButtonBar.setBackground(new Color(0,98, 252,  255));
         JButton closeButton = new JButton(closeIcon);
         closeButton.setName(name + " button");
@@ -60,11 +74,12 @@ public class MyFrame extends JPanel implements ActionListener, MouseMotionListen
         closeButtonBar.add(closeButton);
         panel2.add(closeButtonBar, BorderLayout.NORTH);
         panel2.setName(name);
-        panel2.setSize(500, 500);
-        panel2.setBackground(new Color(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255)));
+        panel2.setSize(500, 400);
+        //panel2.setBackground(new Color(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255)));
         panel2.setLocation(rand.nextInt(800), rand.nextInt(400));
         panel2.addMouseListener(this);
         panel2.addMouseMotionListener(this);
+        panel2.add(image);
         arrPan.add(panel2);
         drawerFromArray();
     }
@@ -72,12 +87,12 @@ public class MyFrame extends JPanel implements ActionListener, MouseMotionListen
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == internetExp) {
-            String name = "internet explorer " + arrPan.size();
+            String name = "Internet Explorer " + arrPan.size();
             createNewWindow(name);
             //make if pressed, and then reorder array based on that
         }
         if (e.getSource() == fileExp) {
-            String name = "file Exp " + arrPan.size();
+            String name = "File Explorer " + arrPan.size();
             createNewWindow(name);
             //make if pressed, and then reorder array based on that
         }
@@ -92,7 +107,6 @@ public class MyFrame extends JPanel implements ActionListener, MouseMotionListen
         }
     }
     public void drawerFromArray() {
-        System.out.println(arrPan.size());
         if (arrPan.size() > 0) {
             for (JPanel jPanel : arrPan) {
                 frame.add(jPanel);
@@ -126,7 +140,6 @@ public class MyFrame extends JPanel implements ActionListener, MouseMotionListen
     @Override
     public void mousePressed(MouseEvent e) {
         reorder(e);
-        drawerFromArray();
         x = e.getX();
         y = e.getY();
         //System.out.println("pressed" + currentLocation);
