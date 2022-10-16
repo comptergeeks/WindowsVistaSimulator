@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class MyFrame extends JPanel implements ActionListener {
     public JFrame frame = new JFrame("Windows XP");
@@ -16,7 +17,7 @@ public class MyFrame extends JPanel implements ActionListener {
     ImageIcon scaledFileExp = new ImageIcon(new ImageIcon("/Users/farhankhan/IdeaProjects/WindowsVista/src/com/company/assets/fileexplorer.png").getImage().getScaledInstance(75, 75, Image.SCALE_DEFAULT));
     public JButton internetExp = new JButton(scaledInternet);
     public JButton fileExp = new JButton(scaledFileExp);
-    ArrayList<JInternalFrame> listOfTabs = new ArrayList<JInternalFrame>();
+    ArrayList<HashMap> listOfTabs = new ArrayList<HashMap>();
 
     public void setFrame() {
         frame.setLayout(new BorderLayout());
@@ -60,8 +61,8 @@ public class MyFrame extends JPanel implements ActionListener {
                 //array of maps?
                 String titleToRemove = jInternalFrame.getTitle();
                 for (int i = 0; i < listOfTabs.size(); i++) {
-                    if (listOfTabs.get(i).contains(titleToRemove)) {
-
+                    if (listOfTabs.get(i).containsValue(titleToRemove)) {
+                        listOfTabs.remove(i);
                     }
                 }
             }
@@ -94,8 +95,10 @@ public class MyFrame extends JPanel implements ActionListener {
         jInternalFrame.setResizable(true);
         jInternalFrame.addInternalFrameListener(e);
         jInternalFrame.setVisible(true);
-
-        listOfTabs.add(jInternalFrame);
+        HashMap mMap = new HashMap();
+        mMap.put("title",jInternalFrame.getTitle());
+        mMap.put("frame", jInternalFrame);
+        listOfTabs.add(mMap);
         for (int i = 0; i < listOfTabs.size(); i++) {
             frame.add(jInternalFrame);
         }
