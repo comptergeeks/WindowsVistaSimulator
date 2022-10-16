@@ -3,14 +3,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MyFrame extends JPanel implements ActionListener {
     public JFrame frame = new JFrame("Windows XP");
     public JPanel panel = new JPanel();
     public JLabel background = new JLabel(new ImageIcon("/Users/farhankhan/IdeaProjects/WindowsVista/src/com/company/assets/windowsbackground.jpeg"));
     ImageIcon scaledInternet = new ImageIcon(new ImageIcon("/Users/farhankhan/IdeaProjects/WindowsVista/src/com/company/assets/internet.png").getImage().getScaledInstance(75, 75, Image.SCALE_DEFAULT));
+    ImageIcon scaledFileExp = new ImageIcon(new ImageIcon("/Users/farhankhan/IdeaProjects/WindowsVista/src/com/company/assets/fileexplorer.png").getImage().getScaledInstance(75, 75, Image.SCALE_DEFAULT));
+    public JButton internetExp = new JButton(scaledInternet);
+    public JButton fileExp = new JButton(scaledFileExp);
+    ArrayList<JInternalFrame> listOfTabs = new ArrayList<JInternalFrame>();
 
-    public JButton internetexp = new JButton(scaledInternet);
     public void setFrame() {
         frame.setLayout(new BorderLayout());
         frame.setSize(1600, 900);
@@ -23,21 +28,42 @@ public class MyFrame extends JPanel implements ActionListener {
     public void setPanel() {
         frame.add(panel, BorderLayout.EAST);
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setSize(100, 900);
-        panel.add(internetexp);
+        panel.setSize(75, 900);
+        panel.add(internetExp);
+        panel.add(fileExp);
         panel.setOpaque(false);
-        internetexp.addActionListener(this);
-        internetexp.setBackground(null);
-        internetexp.setBorder(null);
-        internetexp.setSize(200, 200);
-        internetexp.setVisible(true);
-        System.out.println("successful");
-
+        internetExp.addActionListener(this);
+        internetExp.setBackground(null);
+        internetExp.setBorder(null);
+        fileExp.addActionListener(this);
+        fileExp.setBackground(null);
+        fileExp.setBorder(null);
+        JDesktopPane desktopPane = new JDesktopPane();
+        //button array forloop?
+    }
+    public void createNewWindow(String name) {
+        JInternalFrame jInternalFrame=new JInternalFrame();
+        jInternalFrame.setLocation(450, 300);
+        jInternalFrame.setSize(500, 300);
+        jInternalFrame.setTitle(name);
+        jInternalFrame.setVisible(true);
+        jInternalFrame.setClosable(true);
+        jInternalFrame.setResizable(true);
+        listOfTabs.add(jInternalFrame);
+        for (int i = 0; i < listOfTabs.size(); i++) {
+            frame.add(jInternalFrame);
+        }
+        frame.repaint();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        if (e.getSource() == internetExp) {
+            String name = "Internet Explorer";
+            createNewWindow(name);
+            //System.out.println(Arrays.toString(listOfTabs.toArray()));
+            //make if pressed, and then reorder array based on that
+        }
     }
 }
 
