@@ -34,8 +34,6 @@ public class MyFrame extends JPanel implements ActionListener, MouseMotionListen
 
     public void setPanel() {
         frame.add(panel, BorderLayout.LINE_START);
-        frame.add(bottomTaskBar, BorderLayout.PAGE_END);
-        //bottomTaskBar.setLayout(new BoxLayout(bottomTaskBar, BoxLayout.X_AXIS));
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setSize(75, 900);
         panel.add(internetExp);
@@ -47,8 +45,8 @@ public class MyFrame extends JPanel implements ActionListener, MouseMotionListen
         fileExp.addActionListener(this);
         fileExp.setBackground(null);
         fileExp.setBorder(null);
-        bottomTaskBar.setSize(1600, 50);
-        bottomTaskBar.setBackground(new Color(0,96,228));
+        //bottomTaskBar.setSize(1600, 50);
+        //bottomTaskBar.setBackground(new Color(0, 96, 228));
         //button array forloop?
     }
 
@@ -66,11 +64,11 @@ public class MyFrame extends JPanel implements ActionListener, MouseMotionListen
         panel2.setLayout(new BorderLayout());
         closeButtonBar.setLayout(new BoxLayout(closeButtonBar, BoxLayout.Y_AXIS));
         closeButtonBar.setSize(500, 100);
-        closeButtonBar.setBackground(new Color(0,98, 252,  255));
+        closeButtonBar.setBackground(new Color(0, 98, 252, 255));
         JButton closeButton = new JButton(closeIcon);
         closeButton.setName(name + " button");
         closeButton.addActionListener(this);
-        closeButton.setBorder(BorderFactory.createEmptyBorder(5,10,5,10));
+        closeButton.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
         closeButtonBar.add(closeButton);
         panel2.add(closeButtonBar, BorderLayout.NORTH);
         panel2.setName(name);
@@ -99,13 +97,14 @@ public class MyFrame extends JPanel implements ActionListener, MouseMotionListen
         if (e.getSource().toString().contains("button")) {
             String titleToRemove = e.getSource().toString();
             for (int i = 0; i < arrPan.size(); i++) {
-                if(titleToRemove.contains(arrPan.get(i).getName())) {
+                if (titleToRemove.contains(arrPan.get(i).getName())) {
                     panelRemover(i);
                     //arrPan.get(i).setVisible(false);
                 }
             }
         }
     }
+
     public void drawerFromArray() {
         if (arrPan.size() > 0) {
             for (JPanel jPanel : arrPan) {
@@ -116,12 +115,13 @@ public class MyFrame extends JPanel implements ActionListener, MouseMotionListen
                 //tab counter
                 //blue screen of death
             }
-        } else{
+        } else {
             frame.revalidate();
             frame.pack();
             repaint();
         }
     }
+
     public void panelRemover(int index) {
         JPanel panelToDie = arrPan.get(index);
         frame.remove(panelToDie);
@@ -173,6 +173,7 @@ public class MyFrame extends JPanel implements ActionListener, MouseMotionListen
     public void mouseMoved(MouseEvent e) {
 
     }
+
     public void reorder(MouseEvent e) {
         for (int i = 0; i < arrPan.size(); i++) {
             if (e.getSource().toString().contains(arrPan.get(i).getName())) {
